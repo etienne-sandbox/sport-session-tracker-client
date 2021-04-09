@@ -1,15 +1,62 @@
-import { memo } from "react";
-import {
-  Control,
-  FieldPath,
-  FieldValues,
-  useController,
-} from "react-hook-form";
+import { forwardRef, memo } from "react";
 import { styled } from "stitches.config";
+import { FormFieldAccess, useTypedController } from "hooks/useTypedForm";
+import { FieldError } from "react-hook-form";
+import { Colors } from "logic/Colors";
 
-type Props<TFieldValues extends FieldValues> = {
-  name: FieldPath<TFieldValues>;
-  control: Control<TFieldValues>;
+type Props = {
+  type?: "text" | "password";
+  error?: string | FieldError | undefined;
+  placeholder?: string;
+  disabled?: boolean;
+  prefix?: string;
+
+  value?: string;
+  onChange?: (val: string | React.ChangeEvent<HTMLElement>) => void;
+  onBlur?: () => void;
+  name?: string;
+};
+
+export const TextInput = memo(
+  forwardRef<HTMLInputElement, Props>(
+    (
+      {
+        error,
+        disabled,
+        placeholder,
+        prefix,
+        type = "text",
+        name,
+        onBlur,
+        onChange,
+        value,
+      },
+      ref
+    ) => {
+      const errorMsg =
+        error && (typeof error === "string" ? error : error.message);
+      const hasError = errorMsg && errorMsg.length > 0;
+
+      return (
+        <Wrapper>
+          <InputWrapper>
+            {prefix && <Prefix>{prefix}</Prefix>}
+            <Input
+              {...{ name, onBlur, onChange, type, placeholder, value }}
+              mode={hasError ? "error" : undefined}
+              disabled={disabled}
+              ref={ref}
+            />
+          </InputWrapper>
+          {hasError && <ErrorMessage>{errorMsg}</ErrorMessage>}
+        </Wrapper>
+      );
+    }
+  )
+);
+
+type FormProps = {
+  access: FormFieldAccess<string>;
   type?: "text" | "password";
   defaultValue?: string;
   placeholder?: string;
@@ -17,47 +64,25 @@ type Props<TFieldValues extends FieldValues> = {
   prefix?: string;
 };
 
-export function TextInput<TFieldValues extends FieldValues>(
-  props: Props<TFieldValues>
-) {
-  return <TextInputInternal {...props} />;
-}
-
-const TextInputInternal = memo<Props<any>>(
+export const FormTextInput = memo<FormProps>(
   ({
-    name,
+    access,
     placeholder,
     type = "text",
     disabled = false,
     prefix,
-    control,
     defaultValue = "",
   }) => {
     const {
       field,
       fieldState: { error },
-    } = useController({
-      control,
-      name,
-      defaultValue,
-    });
-
-    const hasError = error && error.message;
+    } = useTypedController(access, defaultValue);
 
     return (
-      <Wrapper>
-        <InputWrapper>
-          {prefix && <Prefix>{prefix}</Prefix>}
-          <Input
-            {...field}
-            type={type}
-            placeholder={placeholder}
-            mode={hasError ? "error" : undefined}
-            disabled={disabled}
-          />
-        </InputWrapper>
-        {hasError && <ErrorMessage>{error?.message}</ErrorMessage>}
-      </Wrapper>
+      <TextInput
+        {...field}
+        {...{ error, placeholder, type, disabled, prefix }}
+      />
     );
   }
 );
@@ -91,14 +116,14 @@ const Input = styled("input", {
   paddingBottom: "$02",
   paddingRight: "$02",
   borderWidth: "$small",
-  borderColor: "$blue300",
+  borderColor: Colors.blue(300),
   borderStyle: "solid",
-  backgroundColor: "$transparentBlue",
+  backgroundColor: Colors.indigo(50),
   borderRadius: "$medium",
   variants: {
     mode: {
       error: {
-        borderColor: "$red500",
+        borderColor: Colors.red(500),
       },
     },
   },
@@ -106,7 +131,7 @@ const Input = styled("input", {
 
 const ErrorMessage = styled("p", {
   fontHeight: "$10",
-  color: "$red500",
+  color: Colors.red(500),
   paddingLeft: "$02",
   paddingRight: "$02",
 });

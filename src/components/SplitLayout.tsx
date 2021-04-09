@@ -9,18 +9,10 @@ type Props = {
 export const SplitLayout = memo<Props>(({ content, side }) => {
   return (
     <Wrapper>
-      <Side>{side}</Side>
+      {side}
       <Content>{content}</Content>
     </Wrapper>
   );
-});
-
-const Side = styled("div", {
-  flex: 1,
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "stretch",
-  overflow: "hidden",
 });
 
 const Content = styled("div", {

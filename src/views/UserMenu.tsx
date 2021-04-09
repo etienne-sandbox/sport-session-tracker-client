@@ -1,6 +1,6 @@
 import { memo, useState } from "react";
 import { User } from "logic/api";
-import { User as UserIcon } from "phosphor-react";
+import { Power, User as UserIcon } from "phosphor-react";
 import { IconButton } from "components/IconButton";
 import { Popover } from "components/Popover";
 import { styled } from "stitches.config";
@@ -48,7 +48,13 @@ export const UserMenu = memo<Props>(({ me }) => {
               Hello <Name>{me.firstName}</Name>
             </HelloPara>
             <Spacer vertical={2} />
-            <Button onClick={logout} text="Logout" />
+            <Button
+              onClick={logout}
+              text="Logout"
+              leftIcon={<Power />}
+              color="red"
+              textAlign="left"
+            />
           </Popover>
         </Overlay>
       )}

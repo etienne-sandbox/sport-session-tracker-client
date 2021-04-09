@@ -1,3 +1,4 @@
+import { Colors } from "logic/Colors";
 import { styled } from "stitches.config";
 
 export const Popover = styled("div", {
@@ -7,7 +8,7 @@ export const Popover = styled("div", {
   display: "flex",
   flexDirection: "column",
   alignItems: "stretch",
-  backgroundColor: "$white",
+  backgroundColor: Colors.white,
   boxShadow: "$overlay",
   padding: "$04",
 });

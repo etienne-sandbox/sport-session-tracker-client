@@ -1,5 +1,6 @@
+import * as z from "zod";
 import { memo } from "react";
-import { TextInput } from "components/TextInput";
+import { FormTextInput } from "components/TextInput";
 import { Button } from "components/Button";
 import { FormLayout } from "components/FormLayout";
 import { Link } from "react-router-dom";
@@ -8,16 +9,18 @@ import { Layout } from "./Layout";
 import { useMutation } from "react-query";
 import { actionSignup, SignupParams } from "logic/api";
 import { ErrorBox } from "components/ErrorBox";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { Spacer } from "components/Spacer";
 import { useFetcherOrThrow } from "hooks/useFetcher";
+import { useAlert } from "react-alert";
+import { useTypedForm } from "hooks/useTypedForm";
 
 const SignupFormData = z.object({
   username: z
     .string()
-    .regex(/[A-Za-z0-9_-]+/, 'Must only conatins letter, digit, "-" and "_"'),
+    .regex(
+      /[a-z0-9_-]+/,
+      'Must only contains lowercase letter, digit, "-" and "_"'
+    ),
   password: z.string().min(6),
   firstName: z.string().nonempty(),
   lastName: z.string().nonempty(),
@@ -35,13 +38,13 @@ const SignupFormData = z.object({
     .regex(/^[1-9]+[0-9]*((\.|,)[0-9]{0,2})?$/, "Must be a valid number"),
 });
 
-type TSignupFormData = z.infer<typeof SignupFormData>;
-
 type Props = {
   setToken: (token: string) => void;
 };
 
 export const Signup = memo<Props>(({ setToken }) => {
+  const alert = useAlert();
+
   const fetcher = useFetcherOrThrow();
 
   const { error, isLoading, mutate } = useMutation(
@@ -49,13 +52,13 @@ export const Signup = memo<Props>(({ setToken }) => {
     {
       onSuccess: ({ token }) => {
         setToken(token);
+        alert.success("Signup successful, you are now logged in !");
       },
     }
   );
 
-  const { handleSubmit, control } = useForm<z.infer<typeof SignupFormData>>({
+  const { handleSubmit, access } = useTypedForm(SignupFormData, {
     mode: "onTouched",
-    resolver: zodResolver(SignupFormData),
   });
 
   const onSubmit = handleSubmit(({ age, height, weight, ...other }) => {
@@ -78,57 +81,50 @@ export const Signup = memo<Props>(({ setToken }) => {
                 <Spacer vertical={2} />
               </>
             )}
-            <TextInput<TSignupFormData>
-              name="firstName"
+            <FormTextInput
+              access={access("firstName")}
               placeholder="First Name"
-              control={control}
               disabled={isLoading}
             />
             <Spacer vertical={2} />
-            <TextInput<TSignupFormData>
-              name="lastName"
+            <FormTextInput
+              access={access("lastName")}
               placeholder="Last Name"
-              control={control}
               disabled={isLoading}
             />
             <Spacer vertical={2} />
-            <TextInput<TSignupFormData>
+            <FormTextInput
+              access={access("username")}
               type="text"
-              name="username"
               placeholder="username"
-              control={control}
               disabled={isLoading}
             />
             <Spacer vertical={2} />
-            <TextInput<TSignupFormData>
+            <FormTextInput
+              access={access("password")}
               type="password"
-              name="password"
               placeholder="password"
-              control={control}
               disabled={isLoading}
             />
             <Spacer vertical={2} />
-            <TextInput<TSignupFormData>
+            <FormTextInput
+              access={access("age")}
               type="text"
-              name="age"
               placeholder="age"
-              control={control}
               disabled={isLoading}
             />
             <Spacer vertical={2} />
-            <TextInput<TSignupFormData>
+            <FormTextInput
+              access={access("height")}
               type="text"
-              name="height"
               placeholder="height"
-              control={control}
               disabled={isLoading}
             />
             <Spacer vertical={2} />
-            <TextInput<TSignupFormData>
+            <FormTextInput
+              access={access("weight")}
               type="text"
-              name="weight"
               placeholder="weight"
-              control={control}
               disabled={isLoading}
             />
             <Spacer vertical={[1, 0]} />

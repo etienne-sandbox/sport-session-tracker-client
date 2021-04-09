@@ -15,8 +15,6 @@ const Lazy = lazyMulti({
   UserPage: () => import("./UserPage"),
 });
 
-console.log(Lazy);
-
 export const App = memo(() => {
   const { loading, user, setToken, logout, authFetcher } = useAuth();
 

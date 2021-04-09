@@ -1,5 +1,6 @@
 import Ky from "ky";
 import * as z from "zod";
+import { stringify as stringifyQuerystring } from "querystring";
 
 const UserSchema = z.object({
   username: z.string(),
@@ -73,7 +74,7 @@ function createApiRoute<Params = null, Result = null>({
     const path = getPath(params);
     const res = await methodFn(path, {
       json: body ? body(params) : undefined,
-      searchParams: search ? search(params) : undefined,
+      searchParams: search ? stringifyQuerystring(search(params)) : undefined,
     });
     if (schema === null) {
       if (!res.ok) {
@@ -84,7 +85,7 @@ function createApiRoute<Params = null, Result = null>({
     const data = await res.json();
     const parsed = schema.safeParse(data);
     if (parsed.success === false) {
-      console.log(parsed.error);
+      console.error(parsed.error);
       throw parsed.error;
     }
     return parsed.data;
@@ -138,7 +139,15 @@ export type WorkoutsParams = {
   limit?: number | undefined;
   places?: string[] | undefined;
   order?: "asc" | "desc" | undefined;
-  sort?: "date" | "place" | "user" | undefined;
+  sort?:
+    | "date"
+    | "place"
+    | "user"
+    | "distance"
+    | "duration"
+    | "speed"
+    | undefined;
+  users?: string[] | undefined;
 };
 
 export const workouts = createApiRoute({
@@ -151,9 +160,12 @@ export const workouts = createApiRoute({
         id: z.string(),
         date: z.string(),
         place: z.string(),
+        placeName: z.string(),
         distance: z.number(),
         duration: z.number(),
         user: z.string(),
+        speed: z.number(),
+        userName: z.string(),
       })
     ),
     total: z.number(),
@@ -161,62 +173,32 @@ export const workouts = createApiRoute({
   search: (params: WorkoutsParams) => params,
 });
 
-// export async function login(
-//   fetcher: Fetcher,
-//   data: { username: string; password: string }
-// ) {
-//   return fetcher
-//     .post("action/login", {
-//       json: data,
-//     })
-//     .json<{ token: string }>();
-// }
+export type CreateWorkoutParams = {
+  date: string;
+  duration: number;
+  distance: number;
+  place: string;
+};
 
-// export async function createList(authFetcher: Fetcher, data: { name: string }) {
-//   return authFetcher
-//     .post("action/create-list", {
-//       json: data,
-//     })
-//     .json<{ id: string }>();
-// }
+export const createWorkout = createApiRoute({
+  method: "POST",
+  getPath: () => "/action/create-workout",
+  getKey: () => "create-workout",
+  schema: z.object({
+    id: z.string(),
+  }),
+  body: (params: CreateWorkoutParams) => params,
+});
 
-// export interface Todo {
-//   id: string;
-//   name: string;
-//   done: boolean;
-// }
-
-// export interface TodoList {
-//   id: string;
-//   name: string;
-//   todos: Array<Todo>;
-//   userIds: Array<string>;
-// }
-
-// export async function getList(authFetcher: Fetcher, listId: string) {
-//   return authFetcher.get(`list/${listId}`).json<TodoList>();
-// }
-
-// export async function addTodo(
-//   authFetcher: Fetcher,
-//   data: { listId: string; name: string; done?: boolean }
-// ) {
-//   return authFetcher
-//     .post("action/add-todo", {
-//       json: data,
-//     })
-//     .json<{ id: string }>();
-// }
-
-// export async function setTodoDone(
-//   authFetcher: Fetcher,
-//   data: { listId: string; todoId: string; done: boolean }
-// ) {
-//   const res = await authFetcher.post("action/set-todo-done", {
-//     json: data,
-//   });
-//   if (res.status !== 204) {
-//     throw new Error("Invalid response status");
-//   }
-//   return;
-// }
+export const getPlace = createApiRoute({
+  method: "GET",
+  getPath: (slug: string) => `place/${slug}`,
+  getKey: (slug: string) => ["place", slug],
+  schema: z.object({
+    slug: z.string(),
+    name: z.string(),
+    lng: z.number(),
+    lat: z.number(),
+    image: z.string(),
+  }),
+});

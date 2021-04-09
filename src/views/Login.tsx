@@ -1,25 +1,23 @@
+import * as z from "zod";
 import { memo } from "react";
 import { Link } from "react-router-dom";
 import { Layout } from "./Layout";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { actionLogin, LoginParams } from "logic/api";
 import { useMutation } from "react-query";
 import { styled } from "stitches.config";
 import { ErrorBox } from "components/ErrorBox";
-import { TextInput } from "components/TextInput";
+import { FormTextInput } from "components/TextInput";
 import { Button } from "components/Button";
 import { Spacer } from "components/Spacer";
 import { FormLayout } from "components/FormLayout";
 import { useFetcherOrThrow } from "hooks/useFetcher";
+import { useAlert } from "react-alert";
+import { useTypedForm } from "hooks/useTypedForm";
 
 const LoginFormData = z.object({
   username: z.string().nonempty(),
   password: z.string().nonempty(),
 });
-
-type TLoginFormData = z.infer<typeof LoginFormData>;
 
 type Props = {
   setToken: (token: string) => void;
@@ -27,18 +25,19 @@ type Props = {
 
 export const Login = memo<Props>(({ setToken }) => {
   const fetcher = useFetcherOrThrow();
+  const alert = useAlert();
 
   const { error, isLoading, mutate } = useMutation(
     (data: LoginParams) => actionLogin.queryFn(fetcher, data),
     {
       onSuccess: ({ token }) => {
         setToken(token);
+        alert.success("You are now logged in !");
       },
     }
   );
 
-  const { handleSubmit, control } = useForm<z.infer<typeof LoginFormData>>({
-    resolver: zodResolver(LoginFormData),
+  const { handleSubmit, access } = useTypedForm(LoginFormData, {
     mode: "onTouched",
   });
 
@@ -57,17 +56,15 @@ export const Login = memo<Props>(({ setToken }) => {
                 <Spacer vertical={2} />
               </>
             )}
-            <TextInput<TLoginFormData>
-              control={control}
-              name="username"
+            <FormTextInput
+              access={access("username")}
               placeholder="username"
               disabled={isLoading}
             />
             <Spacer vertical={2} />
-            <TextInput<TLoginFormData>
-              control={control}
+            <FormTextInput
+              access={access("password")}
               type="password"
-              name="password"
               placeholder="password"
               disabled={isLoading}
             />

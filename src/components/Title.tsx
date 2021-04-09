@@ -1,3 +1,4 @@
+import { Colors } from "logic/Colors";
 import { styled } from "stitches.config";
 
 export const Title = styled("h2", {
@@ -5,6 +6,6 @@ export const Title = styled("h2", {
   fontHeight: "$20",
   textAlign: "center",
   marginBottom: "$10",
-  color: "$grey900",
+  color: Colors.grey(900),
   fontWeight: "$400",
 });

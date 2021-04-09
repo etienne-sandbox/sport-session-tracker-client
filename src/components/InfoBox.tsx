@@ -1,3 +1,4 @@
+import { Colors } from "logic/Colors";
 import { memo } from "react";
 import { styled } from "stitches.config";
 
@@ -16,8 +17,8 @@ export const InfoBox = memo<Props>(({ info, title }) => {
 });
 
 const InfoWrapper = styled("div", {
-  color: "$white",
-  backgroundColor: "$blue600",
+  color: Colors.white,
+  backgroundColor: Colors.blue(600),
   fontHeight: "$06",
   paddingLeft: "$04",
   paddingRight: "$04",
@@ -25,7 +26,7 @@ const InfoWrapper = styled("div", {
   paddingBottom: "$04",
   borderRadius: "$medium",
   a: {
-    color: "$white",
+    color: Colors.white,
   },
 });
 

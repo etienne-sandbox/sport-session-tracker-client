@@ -3,6 +3,7 @@ import { css, styled } from "stitches.config";
 import { Asterisk } from "phosphor-react";
 import { LinkBox } from "./LinkBox";
 import { Spacer } from "components/Spacer";
+import { Colors } from "logic/Colors";
 
 type Props = {
   id: string;
@@ -35,9 +36,9 @@ const Wrapper = styled("div", {
   paddingLeft: "$04",
   paddingTop: "$02",
   paddingBottom: "$02",
-  backgroundColor: "$transparentBlue",
+  backgroundColor: Colors.indigo(50),
   "&:hover": {
-    backgroundColor: "$blue500",
-    color: "$white",
+    backgroundColor: Colors.blue(500),
+    color: Colors.white,
   },
 });

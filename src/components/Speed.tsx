@@ -2,21 +2,11 @@ import { memo } from "react";
 import { styled } from "stitches.config";
 
 type Props = {
-  distance: number;
+  speed: number;
 };
 
-export const Distance = memo<Props>(({ distance }) => {
-  if (distance < 1000) {
-    return (
-      <Wrapper>
-        <Num>
-          <Small>{distance.toFixed(0)}</Small>
-        </Num>{" "}
-        <Unit>m</Unit>
-      </Wrapper>
-    );
-  }
-  const num = (distance / 1000).toFixed(2);
+export const Speed = memo<Props>(({ speed }) => {
+  const num = speed.toFixed(2);
   const [kms, m] = num.split(".");
   return (
     <Wrapper>
@@ -24,7 +14,7 @@ export const Distance = memo<Props>(({ distance }) => {
         {kms}
         <Small>,{m}</Small>
       </Num>{" "}
-      <Unit>km</Unit>
+      <Unit>km/h</Unit>
     </Wrapper>
   );
 });

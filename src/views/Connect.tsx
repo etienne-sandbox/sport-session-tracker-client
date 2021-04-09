@@ -6,10 +6,11 @@ import { useQuery } from "react-query";
 import { ServerPortInput } from "./ServerPortInput";
 import { FetcherContext } from "hooks/useFetcher";
 import { useLocalStorage } from "hooks/useLocalStorage";
+import { PublicUrlContext } from "hooks/usePublicUrl";
 
 const PORT_STORAGE_KEY = `SPORT-SESSION-TRACKER_CLIENT_PORT_V1`;
 
-export const Connect = memo(() => {
+export const Connect = memo(function Connect() {
   const [port, setPort] = useLocalStorage(PORT_STORAGE_KEY, "3001");
   const [connectFail, setConectFail] = useState(false);
 
@@ -31,7 +32,9 @@ export const Connect = memo(() => {
   if (status === "success") {
     return (
       <FetcherContext.Provider value={fetcher}>
-        <App />
+        <PublicUrlContext.Provider value={`http://localhost:${port}/public`}>
+          <App />
+        </PublicUrlContext.Provider>
       </FetcherContext.Provider>
     );
   }

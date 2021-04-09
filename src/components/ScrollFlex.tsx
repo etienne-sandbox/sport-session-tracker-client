@@ -5,11 +5,31 @@ import useComponentSize from "@rehooks/component-size";
 
 type Direction = "vertical" | "horizontal" | "both";
 
+export type ScrollState = {
+  clientHeight: number;
+  clientWidth: number;
+  contentScrollHeight: number;
+  contentScrollWidth: number;
+  scrollHeight: number;
+  scrollWidth: number;
+  scrollTop: number;
+  scrollLeft: number;
+  scrollYBlocked: boolean;
+  scrollXBlocked: boolean;
+  scrollYPossible: boolean;
+  scrollXPossible: boolean;
+  trackYVisible: boolean;
+  trackXVisible: boolean;
+  isRTL?: boolean;
+  zoomLevel: number;
+};
+
 type Props = {
   children: JSX.Element | null;
   direction?: Direction;
   justifyContent?: "center" | "flex-start";
   scrollRef?: RefObject<Scrollbar | null>;
+  onScroll?: (scrollValues: ScrollState, prevScrollState: ScrollState) => void;
 };
 
 export const ScrollFlex = memo<Props>(
@@ -18,6 +38,7 @@ export const ScrollFlex = memo<Props>(
     direction = "vertical",
     justifyContent = "flex-start",
     scrollRef,
+    onScroll,
   }) => {
     const contentRef = useRef<HTMLDivElement>(null);
     const compSize = useComponentSize(contentRef);
@@ -54,6 +75,7 @@ export const ScrollFlex = memo<Props>(
           scrollbarWidth={size(0, 4)}
           ref={scrollRef as any}
           disableTracksWidthCompensation={true}
+          onScroll={onScroll as any}
         >
           <div style={innerStyle}>{children}</div>
         </Scrollbar>

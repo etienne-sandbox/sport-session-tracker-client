@@ -1,15 +1,14 @@
+import * as z from "zod";
 import { Fragment, memo } from "react";
 import { Layout } from "./Layout";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { styled } from "stitches.config";
 import { ErrorBox } from "components/ErrorBox";
-import { TextInput } from "components/TextInput";
+import { FormTextInput } from "components/TextInput";
 import { Button } from "components/Button";
 import { Spacer } from "components/Spacer";
 import { FormLayout } from "components/FormLayout";
 import { InfoBox } from "components/InfoBox";
+import { useTypedForm } from "hooks/useTypedForm";
 
 const ServerPortFormData = z.object({
   port: z
@@ -30,8 +29,6 @@ const ServerPortFormData = z.object({
     }, "Please enter a valid port number"),
 });
 
-type TServerPortFormData = z.infer<typeof ServerPortFormData>;
-
 type Props = {
   onChange: (v: string) => void;
   initialPort: string;
@@ -40,8 +37,7 @@ type Props = {
 
 export const ServerPortInput = memo<Props>(
   ({ onChange, initialPort, isFetching }) => {
-    const { control, handleSubmit } = useForm({
-      resolver: zodResolver(ServerPortFormData),
+    const { access, handleSubmit } = useTypedForm(ServerPortFormData, {
       defaultValues: {
         port: initialPort,
       },
@@ -49,7 +45,6 @@ export const ServerPortInput = memo<Props>(
     });
 
     const onSubmit = handleSubmit((values) => {
-      console.log(onChange);
       onChange(values.port);
     });
 
@@ -76,10 +71,9 @@ export const ServerPortInput = memo<Props>(
                 }
               />
               <Spacer vertical={[1, 0]} />
-              <TextInput<TServerPortFormData>
-                name="port"
+              <FormTextInput
+                access={access("port")}
                 placeholder="port"
-                control={control}
                 disabled={isFetching}
                 prefix="http://localhost:"
               />

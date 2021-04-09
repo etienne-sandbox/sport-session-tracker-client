@@ -5,6 +5,7 @@ import { Spacer } from "./Spacer";
 import { Loader } from "./Loader";
 import { ActionWrapper } from "./ActionWrapper";
 import { IconButton } from "./IconButton";
+import { Colors } from "logic/Colors";
 
 type Props = {
   title?: string;
@@ -21,11 +22,12 @@ export const Header = memo<Props>(
       </ActionWrapper>
     ),
     rightAction,
-    title = "Session Tracker",
+    title = "Workout Tracker",
     loading = false,
   }) => {
     return (
       <HeaderEl>
+        <Spacer horizontal={2} />
         <SideBox>{leftAction}</SideBox>
         <Title>
           {loading ? (
@@ -37,6 +39,7 @@ export const Header = memo<Props>(
           <TitleText>{title}</TitleText>
         </Title>
         <SideBox css={{ flexDirection: "row-reverse" }}>{rightAction}</SideBox>
+        <Spacer horizontal={2} />
       </HeaderEl>
     );
   }
@@ -53,15 +56,14 @@ const SideBox = styled("div", {
 const HeaderEl = styled("header", {
   display: "flex",
   flexDirection: "row",
-  alignItems: "stretch",
+  alignItems: "center",
   justifyContent: "space-between",
   textAlign: "center",
-  minHeight: "$22",
-  margin: "$02",
+  minHeight: "$24",
   marginBottom: 0,
-  backgroundColor: "$red100",
-  color: "$white",
-  borderRadius: "$medium",
+  backgroundColor: Colors.white,
+  boxShadow: "$soft",
+  borderRadius: "$big",
 });
 
 const Title = styled("h1", {
@@ -73,7 +75,7 @@ const Title = styled("h1", {
   flexDirection: "row",
   alignItems: "center",
   paddingRight: "$02",
-  color: "$blueGrey900",
+  color: Colors.blueGrey(900),
   justifyContent: "center",
 });
 

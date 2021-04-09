@@ -1,4 +1,4 @@
-import { FunctionComponent, memo, useEffect, useRef, useState } from "react";
+import { FunctionComponent, memo, useEffect, useMemo, useRef } from "react";
 import { AuthenticatedLayout } from "./AuthenticatedLayout";
 import { Plus, User } from "phosphor-react";
 import { IconButton } from "components/IconButton";
@@ -13,17 +13,47 @@ import { styled } from "stitches.config";
 import { ScrollFlex } from "components/ScrollFlex";
 import { addBetween } from "logic/Utils";
 import { Spacer } from "components/Spacer";
-import { Distance } from "components/Distance";
 import { Pagination } from "components/Pagination";
 import Scrollbar from "react-scrollbars-custom";
-import { Duration } from "../components/Duration";
+import { FooterWrapper } from "components/FooterWrapper";
+import { useHistory } from "react-router-dom";
+import * as z from "zod";
+import { createUseRouterQuery, Validators } from "hooks/useRouterQuery";
+import { stringify } from "querystring";
+import { WorkoutCard } from "./WorkoutCard";
+import { WorkoutFilters } from "./WorkoutFilters";
 
-const PAGE_SIZE = 30;
+const PAGE_SIZE = 20;
+
+const useRouterQuery = createUseRouterQuery(
+  {
+    page: Validators.optional(Validators.int),
+    order: Validators.optional(Validators.string),
+    sort: Validators.optional(Validators.string),
+  },
+  z.object({
+    page: z.number().int().positive().optional(),
+    order: z.enum(["asc", "desc"]).optional(),
+    sort: z
+      .enum(["date", "place", "user", "distance", "duration", "speed"])
+      .optional(),
+  })
+);
 
 export const HomePage: FunctionComponent = memo(() => {
   const me = useMe();
+  const history = useHistory();
 
-  const [params, setParams] = useState<WorkoutsParams>({ limit: PAGE_SIZE });
+  const query = useRouterQuery();
+
+  const params = useMemo((): WorkoutsParams => {
+    const { page = 1, ...other } = query;
+    return {
+      limit: PAGE_SIZE,
+      offset: (page - 1) * PAGE_SIZE,
+      ...other,
+    };
+  }, [query]);
 
   const scrollbarRef = useRef<Scrollbar | null>(null);
 
@@ -59,32 +89,31 @@ export const HomePage: FunctionComponent = memo(() => {
       }
       content={
         <SplitLayout
-          side={<p>Hello</p>}
+          side={
+            <WorkoutFilters
+              sortBy={params.sort ?? "date"}
+              setSortBy={(v) => {
+                history.push({
+                  search: stringify({ ...query, sort: v, page: 1 }),
+                });
+              }}
+              orderBy={params.order ?? "asc"}
+              setOrderBy={(v) => {
+                history.push({
+                  search: stringify({ ...query, order: v, page: 1 }),
+                });
+              }}
+            />
+          }
           content={
             <ResourceHandler
               resource={workoutsRes}
               renderPending={() => {
-                return (
-                  <div style={{ flex: 1 }}>
-                    <div style={{ flex: 1 }} />
-                    <Pagination />
-                  </div>
-                );
+                return null;
               }}
               renderResolved={(workouts) => {
-                const pageCount = Math.floor(workouts.total / PAGE_SIZE);
-                const offset = params.offset ?? 0;
-                const currentPage = Math.floor(offset / PAGE_SIZE);
-
                 return (
-                  <div
-                    style={{
-                      flex: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      overflow: "hidden",
-                    }}
-                  >
+                  <Content>
                     <ScrollFlex scrollRef={scrollbarRef}>
                       <Cards>
                         {addBetween(
@@ -94,6 +123,12 @@ export const HomePage: FunctionComponent = memo(() => {
                                 key={workout.id}
                                 distance={workout.distance}
                                 duration={workout.duration}
+                                speed={workout.speed}
+                                date={workout.date}
+                                place={workout.place}
+                                placeName={workout.placeName}
+                                userDisplayName={workout.userName}
+                                username={workout.user}
                               />
                             );
                           }),
@@ -103,83 +138,45 @@ export const HomePage: FunctionComponent = memo(() => {
                         )}
                       </Cards>
                     </ScrollFlex>
-                    <PaginationWrapper>
-                      <Pagination
-                        page={currentPage}
-                        pageCount={pageCount}
-                        onChange={(page) => {
-                          setParams((prev) => ({
-                            ...prev,
-                            offset: page * PAGE_SIZE,
-                          }));
-                        }}
-                      />
-                    </PaginationWrapper>
-                    {/* <div>
-                      <button
-                        onClick={() => {
-                          setParams((prev) => ({
-                            ...prev,
-                            offset: Math.max(0, (prev.offset ?? 0) - 30),
-                          }));
-                        }}
-                      >
-                        Prev
-                      </button>
-                      <button
-                        onClick={() => {
-                          setParams((prev) => ({
-                            ...prev,
-                            offset: (prev.offset ?? 0) + 30,
-                          }));
-                        }}
-                      >
-                        Next
-                      </button>
-                    </div> */}
-                  </div>
+                  </Content>
                 );
               }}
             />
           }
         />
       }
+      footer={
+        <FooterWrapper
+          css={{
+            minWidth: 500,
+            alignSelf: "center",
+          }}
+        >
+          <ResourceHandler
+            resource={workoutsRes}
+            renderPending={() => <Pagination />}
+            renderRejected={() => <Pagination />}
+            renderResolved={(workouts) => {
+              const pageCount = Math.floor(workouts.total / PAGE_SIZE);
+              const currentPage = (query.page ?? 1) - 1;
+
+              return (
+                <Pagination
+                  page={currentPage}
+                  pageCount={pageCount}
+                  onChange={(page) => {
+                    history.push({
+                      search: stringify({ ...query, page: page + 1 }),
+                    });
+                  }}
+                />
+              );
+            }}
+          />
+        </FooterWrapper>
+      }
     />
   );
-});
-
-type WorkoutCardProps = {
-  distance: number;
-  duration: number;
-};
-
-const WorkoutCard = memo<WorkoutCardProps>(({ distance, duration }) => {
-  return (
-    <CardWrapper>
-      <CardHeader>
-        <Distance distance={distance} />
-        <Duration duration={duration} />
-      </CardHeader>
-    </CardWrapper>
-  );
-  // <div key={workout.id}>
-  //  <Link to={`/workout/${workout.id}`}>
-  //    {workout.distance}m / {workout.duration} minutes
-  //  </Link>
-  //  {" - "}
-  //  <Link to={`/user/${workout.user}`}>
-  //    {workout.user}
-  //  </Link>
-  //  {" - "}
-  //  <Link to={`/place/${workout.place}`}>
-  //    {workout.place}
-  //  </Link>
-  // </div>
-});
-
-const PaginationWrapper = styled("div", {
-  padding: "$04",
-  paddingTop: 0,
 });
 
 const Cards = styled("div", {
@@ -187,14 +184,9 @@ const Cards = styled("div", {
   paddingRight: "$10",
 });
 
-const CardWrapper = styled("div", {
-  backgroundColor: "$transparentBlue",
-  borderRadius: "$big",
-  minHeight: "$20",
-});
-
-const CardHeader = styled("div", {
+const Content = styled("div", {
+  flex: 1,
   display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
+  flexDirection: "column",
+  overflow: "hidden",
 });

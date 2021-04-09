@@ -28,7 +28,6 @@ export const Duration = memo<Props>(({ duration }) => {
 const Wrapper = styled("span", {
   fontWeight: "$700",
   fontHeight: "$12",
-  minWidth: "$40",
   textAlign: "right",
   display: "inline-block",
 });

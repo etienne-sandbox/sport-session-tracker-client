@@ -1,4 +1,6 @@
 import { lazy } from "react";
+import { parseISO, isValid } from "date-fns";
+import * as z from "zod";
 
 export function addBetween<T>(
   list: Array<T>,
@@ -46,3 +48,8 @@ export function lazyMulti<
 export function clamp(val: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, val));
 }
+
+export const ZodDateISOString = z.string().refine((val) => {
+  const parsed = parseISO(val);
+  return isValid(parsed);
+});

@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { styled } from "stitches.config";
 import Ky from "ky";
+import { Colors } from "logic/Colors";
 
 type Props = {
   error: unknown;
@@ -51,8 +52,8 @@ export const ErrorBox = memo<Props>(({ error }) => {
 });
 
 const ErrorWrapper = styled("div", {
-  color: "$white",
-  backgroundColor: "$red500",
+  color: Colors.white,
+  backgroundColor: Colors.red(500),
   fontHeight: "$06",
   paddingLeft: "$04",
   paddingRight: "$04",

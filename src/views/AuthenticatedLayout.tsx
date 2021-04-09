@@ -10,6 +10,7 @@ import { ActionWrapper } from "components/ActionWrapper";
 
 type Props = {
   content: React.ReactNode | null;
+  footer?: React.ReactNode | null;
   back?: boolean;
   title?: string;
   homeAction?: boolean;
@@ -25,6 +26,7 @@ export const AuthenticatedLayout = memo<Props>(
     title,
     loading = false,
     homeAction = true,
+    footer = null,
   }) => {
     const me = useMe();
 
@@ -55,6 +57,7 @@ export const AuthenticatedLayout = memo<Props>(
           />
         }
         content={content}
+        footer={footer}
       />
     );
   }

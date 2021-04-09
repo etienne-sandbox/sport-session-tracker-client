@@ -14,6 +14,7 @@ import { Overlay } from "react-oot";
 import { IconButton } from "./IconButton";
 import { X, Check } from "phosphor-react";
 import { Spacer } from "./Spacer";
+import { Colors } from "logic/Colors";
 
 type Props = {
   value: number;
@@ -166,7 +167,11 @@ export const NumberInput = memo<Props>(
               }}
               {...attributes.popper}
             >
-              <Preview>{inputValueFormatted ?? "Invalid Number"}</Preview>
+              <Preview>
+                {inputValueFormatted
+                  ? `Do you mean ${inputValueFormatted} ?`
+                  : "Invalid Number"}
+              </Preview>
               <Spacer horizontal={2} />
               <IconButton small color="red" onClick={onCancel} icon={<X />} />
               <Spacer horizontal={2} />
@@ -175,6 +180,7 @@ export const NumberInput = memo<Props>(
                 color="green"
                 onClick={onClose}
                 icon={<Check />}
+                disabled={inputValueFormatted === null}
               />
             </Popover>
           </Overlay>
@@ -205,14 +211,14 @@ const Input = styled("input", {
   paddingBottom: "0",
   paddingRight: "$02",
   borderWidth: "$small",
-  borderColor: "$blue300",
+  borderColor: Colors.blue(300),
   borderStyle: "solid",
-  backgroundColor: "$transparentBlue",
+  backgroundColor: Colors.indigo(50),
   borderRadius: "$medium",
   variants: {
     mode: {
       error: {
-        borderColor: "$red500",
+        borderColor: Colors.red(500),
       },
     },
   },

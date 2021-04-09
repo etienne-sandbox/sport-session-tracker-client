@@ -51,9 +51,14 @@ export const Pagination = memo<Props>(
           disabled={page === 0}
           leftIcon={<CaretLeft />}
           compact
-          text={page > 0 ? `Page ${pageDisplay - 1}` : ""}
+          text={
+            <ButtonPageText>
+              {page > 0 ? `Page ${pageDisplay - 1}` : null}
+            </ButtonPageText>
+          }
           onClick={() => onPageChange(page - 1)}
         />
+        <Spacer horizontal={4} />
         <Pages>
           Page
           <Spacer horizontal={4} />
@@ -67,11 +72,16 @@ export const Pagination = memo<Props>(
           </PageInput>
           <Spacer horizontal={4} />/ {lastPage + 1}
         </Pages>
+        <Spacer horizontal={4} />
         <Button
           disabled={page === lastPage}
           rightIcon={<CaretRight />}
           compact
-          text={page < lastPage ? `Page ${pageDisplay + 1}` : ""}
+          text={
+            <ButtonPageText>
+              {page < lastPage ? `Page ${pageDisplay + 1}` : null}
+            </ButtonPageText>
+          }
           onClick={() => onPageChange(page + 1)}
         />
       </Wrapper>
@@ -82,6 +92,7 @@ export const Pagination = memo<Props>(
 const Wrapper = styled("div", {
   display: "flex",
   flexDirection: "row",
+  flex: 1,
 });
 
 const Pages = styled("div", {
@@ -95,4 +106,9 @@ const Pages = styled("div", {
 const PageInput = styled("div", {
   minWidth: "$30",
   display: "flex",
+});
+
+const ButtonPageText = styled("span", {
+  width: "$34",
+  display: "inline-block",
 });

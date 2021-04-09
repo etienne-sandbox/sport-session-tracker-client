@@ -5,7 +5,8 @@ import { Connect } from "./Connect";
 import { BrowserRouter as Router } from "react-router-dom";
 import { OverlayProvider } from "react-oot";
 import { LoadingView } from "./LoadingView";
-// import { ReactQueryDevtools } from "react-query/devtools";
+import { positions, Provider as AlertProvider } from "react-alert";
+import { AlertTemplate } from "./AlertTemplate";
 
 export const Root: FunctionComponent = () => {
   return (
@@ -13,10 +14,18 @@ export const Root: FunctionComponent = () => {
       <QueryClientProvider client={queryClient}>
         <Router>
           <OverlayProvider>
-            <Suspense fallback={<LoadingView />}>
-              <Connect />
-              {/* <ReactQueryDevtools /> */}
-            </Suspense>
+            <AlertProvider
+              template={AlertTemplate}
+              timeout={5000}
+              position={positions.TOP_CENTER}
+              containerStyle={{
+                marginBottom: 16,
+              }}
+            >
+              <Suspense fallback={<LoadingView />}>
+                <Connect />
+              </Suspense>
+            </AlertProvider>
           </OverlayProvider>
         </Router>
       </QueryClientProvider>

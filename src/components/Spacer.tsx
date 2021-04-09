@@ -25,4 +25,5 @@ export const Spacer = memo<Props>(({ horizontal, vertical }) => {
 
 const Div = styled("div", {
   flexShrink: 0,
+  alignSelf: "stretch",
 });
