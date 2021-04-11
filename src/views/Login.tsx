@@ -1,6 +1,6 @@
 import * as z from "zod";
 import { memo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Layout } from "./Layout";
 import { actionLogin, LoginParams } from "logic/api";
 import { useMutation } from "react-query";
@@ -13,6 +13,11 @@ import { FormLayout } from "components/FormLayout";
 import { useFetcherOrThrow } from "hooks/useFetcher";
 import { useAlert } from "react-alert";
 import { useTypedForm } from "hooks/useTypedForm";
+import { Header } from "components/Header";
+import { ActionWrapper } from "components/ActionWrapper";
+import { IconButton } from "components/IconButton";
+import { CaretLeft, HouseLine } from "phosphor-react";
+import { useLoggedInRedirectStore } from "hooks/useLoggedInRedirect";
 
 const LoginFormData = z.object({
   username: z.string().nonempty(),
@@ -26,11 +31,16 @@ type Props = {
 export const Login = memo<Props>(({ setToken }) => {
   const fetcher = useFetcherOrThrow();
   const alert = useAlert();
+  const history = useHistory();
+  const origin = useLoggedInRedirectStore((s) => s.redirect);
 
   const { error, isLoading, mutate } = useMutation(
     (data: LoginParams) => actionLogin.queryFn(fetcher, data),
     {
       onSuccess: ({ token }) => {
+        if (origin) {
+          history.replace(origin);
+        }
         setToken(token);
         alert.success("You are now logged in !");
       },
@@ -47,6 +57,23 @@ export const Login = memo<Props>(({ setToken }) => {
 
   return (
     <Layout
+      header={
+        <Header
+          loading={false}
+          leftAction={
+            <ActionWrapper>
+              {origin ? (
+                <IconButton
+                  icon={<CaretLeft />}
+                  onClick={() => history.push(origin)}
+                />
+              ) : (
+                <IconButton icon={<HouseLine />} to="/" />
+              )}
+            </ActionWrapper>
+          }
+        />
+      }
       content={
         <FormLayout title="Login">
           <Form onSubmit={onSubmit}>

@@ -48,7 +48,7 @@ export const Header = memo<Props>(
 const noFlexShrink = css({ flexShrink: 0 });
 
 const SideBox = styled("div", {
-  width: "$40",
+  width: "$70",
   display: "flex",
   flexDirection: "row",
 });

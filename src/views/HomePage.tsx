@@ -1,13 +1,9 @@
 import { FunctionComponent, memo, useEffect, useMemo, useRef } from "react";
-import { AuthenticatedLayout } from "./AuthenticatedLayout";
-import { Plus, User } from "phosphor-react";
-import { IconButton } from "components/IconButton";
-import { useMe } from "hooks/useMe";
-import { Button } from "components/Button";
-import { ActionWrapper } from "components/ActionWrapper";
+import { Layout } from "./Layout";
+import { Plus } from "phosphor-react";
 import { SplitLayout } from "components/SplitLayout";
 import { useApiRoute } from "hooks/useApiRoute";
-import { workouts, WorkoutsParams } from "logic/api";
+import { getWorkouts, GetWorkoutsParams } from "logic/api";
 import { ResourceHandler } from "components/ResourceHandler";
 import { styled } from "stitches.config";
 import { ScrollFlex } from "components/ScrollFlex";
@@ -22,6 +18,9 @@ import { createUseRouterQuery, Validators } from "hooks/useRouterQuery";
 import { stringify } from "querystring";
 import { WorkoutCard } from "./WorkoutCard";
 import { WorkoutFilters } from "./WorkoutFilters";
+import { MainHeader } from "components/MainHeader";
+import { LeftMenu } from "components/LeftMenu";
+import { Button } from "components/Button";
 
 const PAGE_SIZE = 20;
 
@@ -41,12 +40,11 @@ const useRouterQuery = createUseRouterQuery(
 );
 
 export const HomePage: FunctionComponent = memo(() => {
-  const me = useMe();
   const history = useHistory();
 
   const query = useRouterQuery();
 
-  const params = useMemo((): WorkoutsParams => {
+  const params = useMemo((): GetWorkoutsParams => {
     const { page = 1, ...other } = query;
     return {
       limit: PAGE_SIZE,
@@ -57,7 +55,7 @@ export const HomePage: FunctionComponent = memo(() => {
 
   const scrollbarRef = useRef<Scrollbar | null>(null);
 
-  const workoutsRes = useApiRoute(workouts, params, {
+  const workoutsRes = useApiRoute(getWorkouts, params, {
     keepPreviousData: true,
     onSuccess: () => {
       const scrollbar = scrollbarRef.current;
@@ -75,17 +73,16 @@ export const HomePage: FunctionComponent = memo(() => {
   }, [params]);
 
   return (
-    <AuthenticatedLayout
-      homeAction={false}
-      loading={workoutsRes.isFetching}
-      rightAction={
-        <ActionWrapper>
-          {me ? (
-            <IconButton to="/new-workout" icon={<Plus />} />
-          ) : (
-            <Button to="/login" text="Login" leftIcon={<User />} />
-          )}
-        </ActionWrapper>
+    <Layout
+      leftMenu={<LeftMenu active="home" />}
+      header={
+        <MainHeader
+          back={false}
+          loading={workoutsRes.isFetching}
+          authRightAction={
+            <Button to="/create-workout" leftIcon={<Plus />} text="Workout" />
+          }
+        />
       }
       content={
         <SplitLayout
@@ -157,7 +154,7 @@ export const HomePage: FunctionComponent = memo(() => {
             renderPending={() => <Pagination />}
             renderRejected={() => <Pagination />}
             renderResolved={(workouts) => {
-              const pageCount = Math.floor(workouts.total / PAGE_SIZE);
+              const pageCount = Math.ceil(workouts.total / PAGE_SIZE);
               const currentPage = (query.page ?? 1) - 1;
 
               return (

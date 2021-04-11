@@ -62,9 +62,9 @@ export const ServerPortInput = memo<Props>(
                     <a
                       target="_blank"
                       rel="noreferrer"
-                      href="https://github.com/instant-api/todo-multi-user"
+                      href="https://github.com/instant-api/sport-session-tracker"
                     >
-                      @instant-api/todo-multi-user
+                      @instant-api/sport-session-tracker
                     </a>{" "}
                     docs for more informations.
                   </Fragment>

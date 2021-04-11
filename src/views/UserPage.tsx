@@ -1,10 +1,11 @@
+import { InProgress } from "components/InProgress";
 import { memo } from "react";
-import { AuthenticatedLayout } from "./AuthenticatedLayout";
+import { Layout } from "./Layout";
 
 type Props = {
   username: string;
 };
 
 export const UserPage = memo<Props>(({ username }) => {
-  return <AuthenticatedLayout content={<p>TODO: {username}</p>} />;
+  return <Layout content={<InProgress />} />;
 });

@@ -18,7 +18,8 @@ export const AnonymousApp = memo<Props>(({ setToken, commonRoutes }) => {
       exact
       render={() => <Signup setToken={setToken} />}
     />,
-    <Redirect from="/new-workout" to="/login" />,
+    <Redirect from="/create-workout" to="/login" />,
+    <Redirect from="/create-place" to="/login" />,
     ...commonRoutes
   );
 });

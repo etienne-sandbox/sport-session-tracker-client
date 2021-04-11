@@ -1,11 +1,11 @@
 import { Select } from "components/Select";
 import { Spacer } from "components/Spacer";
-import { WorkoutsParams } from "logic/api";
+import { GetWorkoutsParams } from "logic/api";
 import { Colors } from "logic/Colors";
 import { memo } from "react";
 import { styled } from "stitches.config";
 
-const SORT_ITEMS: Array<Required<WorkoutsParams>["sort"]> = [
+const SORT_ITEMS: Array<Required<GetWorkoutsParams>["sort"]> = [
   "date",
   "place",
   "user",
@@ -14,13 +14,16 @@ const SORT_ITEMS: Array<Required<WorkoutsParams>["sort"]> = [
   "speed",
 ];
 
-const ORDER_ITEMS: Array<Required<WorkoutsParams>["order"]> = ["asc", "desc"];
+const ORDER_ITEMS: Array<Required<GetWorkoutsParams>["order"]> = [
+  "asc",
+  "desc",
+];
 
 type WorkoutFiltersProps = {
-  sortBy: Required<WorkoutsParams>["sort"];
-  setSortBy: (val: Required<WorkoutsParams>["sort"]) => void;
-  orderBy: Required<WorkoutsParams>["order"];
-  setOrderBy: (val: Required<WorkoutsParams>["order"]) => void;
+  sortBy: Required<GetWorkoutsParams>["sort"];
+  setSortBy: (val: Required<GetWorkoutsParams>["sort"]) => void;
+  orderBy: Required<GetWorkoutsParams>["order"];
+  setOrderBy: (val: Required<GetWorkoutsParams>["order"]) => void;
 };
 
 export const WorkoutFilters = memo<WorkoutFiltersProps>(

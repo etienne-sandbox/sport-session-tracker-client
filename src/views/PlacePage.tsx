@@ -1,3 +1,5 @@
+import { InProgress } from "components/InProgress";
+import { MainHeader } from "components/MainHeader";
 import { ResourceHandler } from "components/ResourceHandler";
 import { ScrollFlex } from "components/ScrollFlex";
 import { Spacer } from "components/Spacer";
@@ -7,7 +9,7 @@ import { getPlace } from "logic/api";
 import { Colors } from "logic/Colors";
 import { memo, useRef } from "react";
 import { styled } from "stitches.config";
-import { AuthenticatedLayout } from "./AuthenticatedLayout";
+import { Layout } from "./Layout";
 
 type Props = {
   placeSlug: string;
@@ -22,7 +24,8 @@ export const PlacePage = memo<Props>(({ placeSlug }) => {
   const headerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <AuthenticatedLayout
+    <Layout
+      header={<MainHeader back={true} />}
       content={
         <ResourceHandler
           resource={placeRes}
@@ -44,98 +47,8 @@ export const PlacePage = memo<Props>(({ placeSlug }) => {
                 <div>
                   <div style={{ height: HEADER_HEIGHT }} />
                   <Spacer vertical={4} />
-                  <div>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Perspiciatis molestiae, consequatur quis id omnis delectus
-                      eum, perferendis ullam odit aspernatur alias sed
-                      asperiores cupiditate officia impedit illum necessitatibus
-                      sit dignissimos?
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Perspiciatis molestiae, consequatur quis id omnis delectus
-                      eum, perferendis ullam odit aspernatur alias sed
-                      asperiores cupiditate officia impedit illum necessitatibus
-                      sit dignissimos?
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Perspiciatis molestiae, consequatur quis id omnis delectus
-                      eum, perferendis ullam odit aspernatur alias sed
-                      asperiores cupiditate officia impedit illum necessitatibus
-                      sit dignissimos?
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Perspiciatis molestiae, consequatur quis id omnis delectus
-                      eum, perferendis ullam odit aspernatur alias sed
-                      asperiores cupiditate officia impedit illum necessitatibus
-                      sit dignissimos?
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Perspiciatis molestiae, consequatur quis id omnis delectus
-                      eum, perferendis ullam odit aspernatur alias sed
-                      asperiores cupiditate officia impedit illum necessitatibus
-                      sit dignissimos?
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Perspiciatis molestiae, consequatur quis id omnis delectus
-                      eum, perferendis ullam odit aspernatur alias sed
-                      asperiores cupiditate officia impedit illum necessitatibus
-                      sit dignissimos?
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Perspiciatis molestiae, consequatur quis id omnis delectus
-                      eum, perferendis ullam odit aspernatur alias sed
-                      asperiores cupiditate officia impedit illum necessitatibus
-                      sit dignissimos?
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Perspiciatis molestiae, consequatur quis id omnis delectus
-                      eum, perferendis ullam odit aspernatur alias sed
-                      asperiores cupiditate officia impedit illum necessitatibus
-                      sit dignissimos?
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Perspiciatis molestiae, consequatur quis id omnis delectus
-                      eum, perferendis ullam odit aspernatur alias sed
-                      asperiores cupiditate officia impedit illum necessitatibus
-                      sit dignissimos?
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Perspiciatis molestiae, consequatur quis id omnis delectus
-                      eum, perferendis ullam odit aspernatur alias sed
-                      asperiores cupiditate officia impedit illum necessitatibus
-                      sit dignissimos?
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Perspiciatis molestiae, consequatur quis id omnis delectus
-                      eum, perferendis ullam odit aspernatur alias sed
-                      asperiores cupiditate officia impedit illum necessitatibus
-                      sit dignissimos?
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Perspiciatis molestiae, consequatur quis id omnis delectus
-                      eum, perferendis ullam odit aspernatur alias sed
-                      asperiores cupiditate officia impedit illum necessitatibus
-                      sit dignissimos?
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Perspiciatis molestiae, consequatur quis id omnis delectus
-                      eum, perferendis ullam odit aspernatur alias sed
-                      asperiores cupiditate officia impedit illum necessitatibus
-                      sit dignissimos?
-                    </p>
+                  <div style={{ minHeight: 300, display: "flex" }}>
+                    <InProgress />
                   </div>
                 </div>
               </ScrollFlex>

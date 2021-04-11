@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { useFetcherOrThrow } from "./useFetcher";
 import { useLocalStorage } from "./useLocalStorage";
 
-const TOKEN_STORAGE_KEY = `TODO_MULTI_USER_CLIENT_TOKEN_V1`;
+const TOKEN_STORAGE_KEY = `WORKOUTS_CLIENT_TOKEN_V1`;
 
 export type AuthResult = {
   loading: boolean;

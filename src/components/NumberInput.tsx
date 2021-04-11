@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { styled } from "stitches.config";
+import { size, styled } from "stitches.config";
 import { usePopper } from "react-popper";
 import { Popover } from "components/Popover";
 import { Overlay } from "react-oot";
@@ -173,10 +173,15 @@ export const NumberInput = memo<Props>(
                   : "Invalid Number"}
               </Preview>
               <Spacer horizontal={2} />
-              <IconButton small color="red" onClick={onCancel} icon={<X />} />
+              <IconButton
+                size={size(1, 0)}
+                color="red"
+                onClick={onCancel}
+                icon={<X />}
+              />
               <Spacer horizontal={2} />
               <IconButton
-                small
+                size={size(1, 0)}
                 color="green"
                 onClick={onClose}
                 icon={<Check />}

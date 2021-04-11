@@ -2,10 +2,12 @@ import { FunctionComponent, memo } from "react";
 import { Loader } from "components/Loader";
 import { styled } from "stitches.config";
 import { Layout } from "./Layout";
+import { LeftMenu } from "components/LeftMenu";
 
 export const LoadingView: FunctionComponent = memo(() => {
   return (
     <Layout
+      leftMenu={<LeftMenu active={null} />}
       content={
         <Wrapper>
           <Loader size={30} />

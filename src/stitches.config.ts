@@ -50,7 +50,7 @@ const fontSizes: {
   ])
 ) as any;
 
-export const { styled, css, theme } = createCss({
+export const { styled, css, theme, keyframes } = createCss({
   prefix: "",
   themeMap: {
     ...defaultThemeMap,

@@ -134,7 +134,7 @@ export const actionLogin = createApiRoute({
   body: (data: LoginParams) => data,
 });
 
-export type WorkoutsParams = {
+export type GetWorkoutsParams = {
   offset?: number | undefined;
   limit?: number | undefined;
   places?: string[] | undefined;
@@ -150,10 +150,10 @@ export type WorkoutsParams = {
   users?: string[] | undefined;
 };
 
-export const workouts = createApiRoute({
+export const getWorkouts = createApiRoute({
   method: "GET",
   getPath: () => "workouts",
-  getKey: (params: WorkoutsParams) => ["workouts", params],
+  getKey: (params: GetWorkoutsParams) => ["workouts", params],
   schema: z.object({
     results: z.array(
       z.object({
@@ -170,24 +170,24 @@ export const workouts = createApiRoute({
     ),
     total: z.number(),
   }),
-  search: (params: WorkoutsParams) => params,
+  search: (params: GetWorkoutsParams) => params,
 });
 
-export type CreateWorkoutParams = {
+export type ActionCreateWorkoutParams = {
   date: string;
   duration: number;
   distance: number;
   place: string;
 };
 
-export const createWorkout = createApiRoute({
+export const actionCreateWorkout = createApiRoute({
   method: "POST",
   getPath: () => "/action/create-workout",
   getKey: () => "create-workout",
   schema: z.object({
     id: z.string(),
   }),
-  body: (params: CreateWorkoutParams) => params,
+  body: (params: ActionCreateWorkoutParams) => params,
 });
 
 export const getPlace = createApiRoute({
@@ -200,5 +200,28 @@ export const getPlace = createApiRoute({
     lng: z.number(),
     lat: z.number(),
     image: z.string(),
+  }),
+});
+
+export type GetPlacesParams = {
+  offset?: number | undefined;
+  limit?: number | undefined;
+};
+
+export const getPlaces = createApiRoute({
+  method: "GET",
+  getPath: () => `places`,
+  getKey: (params: GetPlacesParams) => ["places", params],
+  search: (params: GetPlacesParams) => params,
+  schema: z.object({
+    results: z.array(
+      z.object({
+        slug: z.string(),
+        name: z.string(),
+        image: z.string(),
+        workoutCount: z.number(),
+      })
+    ),
+    total: z.number(),
   }),
 });

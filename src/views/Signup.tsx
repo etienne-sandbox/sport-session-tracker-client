@@ -3,7 +3,7 @@ import { memo } from "react";
 import { FormTextInput } from "components/TextInput";
 import { Button } from "components/Button";
 import { FormLayout } from "components/FormLayout";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { styled } from "stitches.config";
 import { Layout } from "./Layout";
 import { useMutation } from "react-query";
@@ -13,6 +13,11 @@ import { Spacer } from "components/Spacer";
 import { useFetcherOrThrow } from "hooks/useFetcher";
 import { useAlert } from "react-alert";
 import { useTypedForm } from "hooks/useTypedForm";
+import { Header } from "components/Header";
+import { ActionWrapper } from "components/ActionWrapper";
+import { IconButton } from "components/IconButton";
+import { CaretLeft, HouseLine } from "phosphor-react";
+import { useLoggedInRedirectStore } from "hooks/useLoggedInRedirect";
 
 const SignupFormData = z.object({
   username: z
@@ -44,6 +49,8 @@ type Props = {
 
 export const Signup = memo<Props>(({ setToken }) => {
   const alert = useAlert();
+  const history = useHistory();
+  const origin = useLoggedInRedirectStore((s) => s.redirect);
 
   const fetcher = useFetcherOrThrow();
 
@@ -51,6 +58,9 @@ export const Signup = memo<Props>(({ setToken }) => {
     (data: SignupParams) => actionSignup.queryFn(fetcher, data),
     {
       onSuccess: ({ token }) => {
+        if (origin) {
+          history.replace(origin);
+        }
         setToken(token);
         alert.success("Signup successful, you are now logged in !");
       },
@@ -72,6 +82,23 @@ export const Signup = memo<Props>(({ setToken }) => {
 
   return (
     <Layout
+      header={
+        <Header
+          loading={false}
+          leftAction={
+            <ActionWrapper>
+              {origin ? (
+                <IconButton
+                  icon={<CaretLeft />}
+                  onClick={() => history.push(origin)}
+                />
+              ) : (
+                <IconButton icon={<HouseLine />} to="/" />
+              )}
+            </ActionWrapper>
+          }
+        />
+      }
       content={
         <FormLayout title="Signup">
           <Form onSubmit={onSubmit}>

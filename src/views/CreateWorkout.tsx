@@ -1,11 +1,10 @@
 import { memo } from "react";
-import { AuthenticatedLayout } from "./AuthenticatedLayout";
+import { Layout } from "./Layout";
 import * as z from "zod";
 import { ZodDateISOString } from "logic/Utils";
 import { DateTimeInput } from "components/DateTimeInput";
-import { TextInput } from "components/TextInput";
-import { Spacer } from "components/Spacer";
 import { useTypedForm } from "hooks/useTypedForm";
+import { MainHeader } from "components/MainHeader";
 
 const WorkoutFormData = z.object({
   date: ZodDateISOString,
@@ -14,15 +13,13 @@ const WorkoutFormData = z.object({
   place: z.string(),
 });
 
-export const NewWorkout = memo(() => {
-  const { handleSubmit, access } = useTypedForm(WorkoutFormData, {
+export const CreateWorkout = memo(() => {
+  const {} = useTypedForm(WorkoutFormData, {
     mode: "onTouched",
   });
 
-  console.log(handleSubmit, access);
-
   return (
-    <AuthenticatedLayout
+    <Layout
       content={
         <div style={{ display: "flex" }}>
           <DateTimeInput
@@ -31,10 +28,6 @@ export const NewWorkout = memo(() => {
               console.log(val);
             }}
           />
-          <Spacer horizontal={2} />
-          <div style={{ width: 200 }}>
-            <TextInput value="Hello" />
-          </div>
         </div>
       }
     />
