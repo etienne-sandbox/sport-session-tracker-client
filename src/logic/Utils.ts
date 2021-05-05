@@ -22,18 +22,17 @@ type AsyncComponentModule<
   Component
 > = () => Promise<{ [J in K]: Component }>;
 
+type ExtractComponentType<
+  K extends string | number | symbol,
+  T
+> = T extends AsyncComponentModule<K, infer Comp> ? Comp : never;
+
 export function lazyMulti<
-  Keys extends string,
-  Components extends { [K in Keys]: AsyncComponentModule<K, any> }
+  Components extends { [keys: string]: AsyncComponentModule<string, any> }
 >(
   components: Components
 ): {
-  [K in keyof Components]: Components[K] extends AsyncComponentModule<
-    K,
-    infer Comp
-  >
-    ? Comp
-    : never;
+  [K in keyof Components]: ExtractComponentType<K, Components[K]>;
 } {
   return Object.fromEntries(
     Object.entries(components).map(([key, load]) => {
