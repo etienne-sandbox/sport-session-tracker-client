@@ -17,19 +17,13 @@ export function addBetween<T>(
   }, []);
 }
 
-type AsyncComponentModule<
-  K extends string | number | symbol,
-  Component
-> = () => Promise<{ [J in K]: Component }>;
+type AsyncComponentModule<K extends string | number | symbol, Component> =
+  () => Promise<{ [J in K]: Component }>;
 
-type ExtractComponentType<
-  K extends string | number | symbol,
-  T
-> = T extends AsyncComponentModule<K, infer Comp> ? Comp : never;
+type ExtractComponentType<K extends string | number | symbol, T> =
+  T extends AsyncComponentModule<K, infer Comp> ? Comp : never;
 
-export function lazyMulti<
-  Components extends { [keys: string]: AsyncComponentModule<string, any> }
->(
+export function lazyMulti<Components extends { [keys: string]: any }>(
   components: Components
 ): {
   [K in keyof Components]: ExtractComponentType<K, Components[K]>;
