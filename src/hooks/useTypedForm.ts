@@ -22,13 +22,12 @@ export type FormFieldAccess<T> = {
   path: string;
 };
 
-type UseTypedFormReturn<
-  TFieldValues extends FieldValues
-> = UseFormReturn<TFieldValues> & {
-  access: <TName extends FieldPath<TFieldValues>>(
-    path: TName
-  ) => FormFieldAccess<FieldPathValue<TFieldValues, TName>>;
-};
+type UseTypedFormReturn<TFieldValues extends FieldValues> =
+  UseFormReturn<TFieldValues> & {
+    access: <TName extends FieldPath<TFieldValues>>(
+      path: TName
+    ) => FormFieldAccess<FieldPathValue<TFieldValues, TName>>;
+  };
 
 export function useTypedForm<
   TFieldValues extends FieldValues = FieldValues,
@@ -64,7 +63,7 @@ export function useTypedForm<
   return {
     ...formResult,
     access,
-  };
+  } as any;
 }
 
 export type UseTypedControllerResult<T> = {

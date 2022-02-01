@@ -38,7 +38,9 @@ export const Header = memo<Props>(
           <Spacer horizontal={4} />
           <TitleText>{title}</TitleText>
         </Title>
-        <SideBox css={{ flexDirection: "row-reverse" }}>{rightAction}</SideBox>
+        <SideBox style={{ flexDirection: "row-reverse" }}>
+          {rightAction}
+        </SideBox>
         <Spacer horizontal={2} />
       </HeaderEl>
     );

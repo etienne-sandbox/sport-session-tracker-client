@@ -144,7 +144,7 @@ export const HomePage: FunctionComponent = memo(() => {
       }
       footer={
         <FooterWrapper
-          css={{
+          style={{
             minWidth: 500,
             alignSelf: "center",
           }}

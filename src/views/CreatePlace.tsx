@@ -14,7 +14,7 @@ const WorkoutFormData = z.object({
 });
 
 export const CreatePlace = memo(() => {
-  const {} = useTypedForm(WorkoutFormData, {
+  useTypedForm(WorkoutFormData, {
     mode: "onTouched",
   });
 

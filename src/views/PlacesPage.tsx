@@ -105,7 +105,7 @@ export const PlacesPage: FunctionComponent = memo(() => {
         />
       }
       footer={
-        <FooterWrapper css={{ minWidth: 500, alignSelf: "center" }}>
+        <FooterWrapper style={{ minWidth: 500, alignSelf: "center" }}>
           <ResourceHandler
             resource={placesRes}
             renderPending={() => <Pagination />}

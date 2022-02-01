@@ -15,6 +15,7 @@ import { IconButton } from "./IconButton";
 import { X, Check } from "phosphor-react";
 import { Spacer } from "./Spacer";
 import { Colors } from "logic/Colors";
+import { grid } from "logic/Design";
 
 type Props = {
   value: number;
@@ -33,9 +34,10 @@ export const NumberInput = memo<Props>(
     const [refEl, setRefEl] = useState<HTMLInputElement | null>(null);
     const [popperEl, setPopperEl] = useState<HTMLDivElement | null>(null);
 
-    const defaultFormat = useCallback((num: number) => num.toFixed(precision), [
-      precision,
-    ]);
+    const defaultFormat = useCallback(
+      (num: number) => num.toFixed(precision),
+      [precision]
+    );
 
     const { styles, attributes } = usePopper(refEl, popperEl, {
       placement: "top",
@@ -44,10 +46,10 @@ export const NumberInput = memo<Props>(
 
     const formatResolved = format ?? defaultFormat;
 
-    const formatted = useMemo(() => formatResolved(value), [
-      formatResolved,
-      value,
-    ]);
+    const formatted = useMemo(
+      () => formatResolved(value),
+      [formatResolved, value]
+    );
 
     const [inputValue, setInputValue] = useState(formatted);
     const [open, setOpen] = useState(false);
@@ -158,12 +160,10 @@ export const NumberInput = memo<Props>(
               ref={setPopperEl}
               style={{
                 ...styles.popper,
-              }}
-              css={{
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
-                padding: "$02",
+                padding: grid(0, 0, 1),
               }}
               {...attributes.popper}
             >

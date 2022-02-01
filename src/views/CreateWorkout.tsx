@@ -4,7 +4,6 @@ import * as z from "zod";
 import { ZodDateISOString } from "logic/Utils";
 import { DateTimeInput } from "components/DateTimeInput";
 import { useTypedForm } from "hooks/useTypedForm";
-import { MainHeader } from "components/MainHeader";
 
 const WorkoutFormData = z.object({
   date: ZodDateISOString,
@@ -14,7 +13,7 @@ const WorkoutFormData = z.object({
 });
 
 export const CreateWorkout = memo(() => {
-  const {} = useTypedForm(WorkoutFormData, {
+  useTypedForm(WorkoutFormData, {
     mode: "onTouched",
   });
 

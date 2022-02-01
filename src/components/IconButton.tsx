@@ -1,8 +1,7 @@
 import { forwardRef, memo, MouseEventHandler, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { size, styled } from "stitches.config";
-import { IconContext } from "phosphor-react";
-import { IconContextProps } from "phosphor-react/dist/lib";
+import { IconContext, IconProps } from "phosphor-react";
 import { ColorName, Colors } from "logic/Colors";
 
 export type IconWeight =
@@ -47,7 +46,7 @@ export const IconButton = memo<IconButtonProps>(
       const Elem = to ? (Link as any) : "button";
 
       const iconConfig = useMemo(
-        (): IconContextProps => ({
+        (): IconProps => ({
           color: "currentColor",
           size,
           weight,
@@ -65,7 +64,7 @@ export const IconButton = memo<IconButtonProps>(
             disabled={disabled}
             type={type}
             to={to}
-            css={
+            style={
               disabled
                 ? {
                     backgroundColor: Colors.grey(300),

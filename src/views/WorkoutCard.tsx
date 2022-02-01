@@ -47,7 +47,7 @@ export const WorkoutCard = memo<WorkoutCardProps>(
         </Header>
         <Stats>
           <StatItem>
-            <StatIcon css={{ background: Colors.green(ICON_SHADE) }}>
+            <StatIcon style={{ background: Colors.green(ICON_SHADE) }}>
               <Path size={ICON_SIZE} />
             </StatIcon>
             <Spacer horizontal={4} />
@@ -55,7 +55,7 @@ export const WorkoutCard = memo<WorkoutCardProps>(
           </StatItem>
           <Spacer horizontal={4} />
           <StatItem>
-            <StatIcon css={{ background: Colors.blue(ICON_SHADE) }}>
+            <StatIcon style={{ background: Colors.blue(ICON_SHADE) }}>
               <Timer size={ICON_SIZE} />
             </StatIcon>
             <Spacer horizontal={4} />
@@ -63,7 +63,7 @@ export const WorkoutCard = memo<WorkoutCardProps>(
           </StatItem>
           <Spacer horizontal={4} />
           <StatItem>
-            <StatIcon css={{ background: Colors.cyan(ICON_SHADE) }}>
+            <StatIcon style={{ background: Colors.cyan(ICON_SHADE) }}>
               <CaretCircleDoubleRight size={ICON_SIZE} />
             </StatIcon>
             <Spacer horizontal={4} />
@@ -72,7 +72,7 @@ export const WorkoutCard = memo<WorkoutCardProps>(
         </Stats>
         <Stats>
           <StatItem>
-            <StatIcon css={{ background: Colors.indigo(ICON_SHADE) }}>
+            <StatIcon style={{ background: Colors.indigo(ICON_SHADE) }}>
               <CalendarBlank size={ICON_SIZE} />
             </StatIcon>
             <Spacer horizontal={4} />
@@ -81,7 +81,7 @@ export const WorkoutCard = memo<WorkoutCardProps>(
         </Stats>
         <Stats>
           <StatItem>
-            <StatIcon css={{ background: Colors.pink(ICON_SHADE) }}>
+            <StatIcon style={{ background: Colors.pink(ICON_SHADE) }}>
               <MapPin size={ICON_SIZE} />
             </StatIcon>
             <Spacer horizontal={4} />

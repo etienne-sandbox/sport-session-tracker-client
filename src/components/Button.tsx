@@ -1,10 +1,11 @@
 import { ColorName, Colors } from "logic/Colors";
-import { IconContextProps } from "phosphor-react/dist/lib";
+import { IconProps } from "phosphor-react";
 import { IconContext } from "phosphor-react";
 import { forwardRef, Fragment, memo, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { size, styled } from "stitches.config";
 import { Spacer } from "./Spacer";
+import styled from "styled-components";
+import { fontHeightGrid, grid } from "../logic/Design";
 
 type ButtonProps = {
   onClick?: () => void;
@@ -42,9 +43,9 @@ export const Button = memo(
       const iconSpace = compact ? 2 : 4;
 
       const iconConfig = useMemo(
-        (): IconContextProps => ({
+        (): IconProps => ({
           color: "currentColor",
-          size: size(1, 1),
+          size: grid(1, 0, 0, 1),
           weight: "regular",
           mirrored: false,
         }),
@@ -67,7 +68,7 @@ export const Button = memo(
             disabled={disabled}
             type={type}
             to={to}
-            css={{
+            style={{
               backgroundColor: disabled ? Colors.grey(400) : Colors[color](500),
               cursor: disabled ? "not-allowed" : "pointer",
 
@@ -89,7 +90,7 @@ export const Button = memo(
               singleIconSpace
             )}
             <ButtonText
-              css={{
+              style={{
                 textAlign: textAlign,
               }}
             >
@@ -110,24 +111,24 @@ export const Button = memo(
   )
 );
 
-const ButtonText = styled("span", {
-  fontHeight: "$11",
+const ButtonText = styled.span({
+  ...fontHeightGrid(1, 0, 0, 1),
   flex: 1,
 });
 
-const ButtonElem = styled("button", {
+const ButtonElem = styled.button({
   textTransform: "none",
   textDecoration: "none",
   margin: 0,
-  fontFamily: "$spaceGrotesk",
-  paddingLeft: "$04",
-  paddingRight: "$04",
-  paddingTop: "$02",
-  paddingBottom: "$02",
+  fontFamily: '"Space Grotesk", sans-serif',
+  paddingLeft: grid(0, 1),
+  paddingRight: grid(0, 1),
+  paddingTop: grid(0, 0, 1),
+  paddingBottom: grid(0, 0, 1),
   border: "none",
-  borderRadius: "$medium",
+  borderRadius: grid(0, 0, 1),
   color: Colors.white,
-  fontWeight: "$600",
+  fontWeight: 600,
   display: "flex",
   flexDirection: "row",
   alignItems: "center",

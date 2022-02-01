@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { styled } from "stitches.config";
-import Ky from "ky";
+import { HTTPError } from "ky";
 import { Colors } from "logic/Colors";
 
 type Props = {
@@ -26,7 +26,7 @@ export const ErrorBox = memo<Props>(({ error }) => {
       </ErrorWrapper>
     );
   }
-  if (error instanceof Ky.HTTPError) {
+  if (error instanceof HTTPError) {
     console.log(error.response);
     const parsed = (error.response as any).parsed;
     const message = parsed && parsed.message;
