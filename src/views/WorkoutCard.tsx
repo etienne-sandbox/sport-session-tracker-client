@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { size, styled } from "stitches.config";
 
 type WorkoutCardProps = {
+  id: string;
   distance: number;
   duration: number;
   userDisplayName: string;
@@ -24,74 +25,84 @@ type WorkoutCardProps = {
   speed: number;
   placeName: string;
   date: string;
+  selected: boolean;
+  onClick?: (id: string) => void;
 };
 
 const ICON_SIZE = size(0, 6);
 const ICON_SHADE = 250;
 
-export const WorkoutCard = memo<WorkoutCardProps>(
-  ({
-    distance,
-    duration,
-    speed,
-    place,
-    placeName,
-    userDisplayName,
-    username,
-    date,
-  }) => {
-    return (
-      <CardWrapper>
-        <Header>
-          <NameLink to={`/user/${username}`}>{userDisplayName}</NameLink>
-        </Header>
-        <Stats>
-          <StatItem>
-            <StatIcon style={{ background: Colors.green(ICON_SHADE) }}>
-              <Path size={ICON_SIZE} />
-            </StatIcon>
-            <Spacer horizontal={4} />
-            <Distance distance={distance} />
-          </StatItem>
+export const WorkoutCard = memo(function WorkoutCard({
+  distance,
+  duration,
+  speed,
+  place,
+  placeName,
+  userDisplayName,
+  username,
+  date,
+  onClick,
+  selected,
+  id,
+}: WorkoutCardProps): JSX.Element {
+  return (
+    <CardWrapper
+      style={{ border: selected ? `3px solid #7E57C2` : "none" }}
+      onClick={() => {
+        if (onClick) {
+          onClick(id);
+        }
+      }}
+    >
+      <Header>
+        <NameLink to={`/user/${username}`}>{userDisplayName}</NameLink>
+      </Header>
+      <Stats>
+        <StatItem>
+          <StatIcon style={{ background: Colors.green(ICON_SHADE) }}>
+            <Path size={ICON_SIZE} />
+          </StatIcon>
           <Spacer horizontal={4} />
-          <StatItem>
-            <StatIcon style={{ background: Colors.blue(ICON_SHADE) }}>
-              <Timer size={ICON_SIZE} />
-            </StatIcon>
-            <Spacer horizontal={4} />
-            <Duration duration={duration} />
-          </StatItem>
+          <Distance distance={distance} />
+        </StatItem>
+        <Spacer horizontal={4} />
+        <StatItem>
+          <StatIcon style={{ background: Colors.blue(ICON_SHADE) }}>
+            <Timer size={ICON_SIZE} />
+          </StatIcon>
           <Spacer horizontal={4} />
-          <StatItem>
-            <StatIcon style={{ background: Colors.cyan(ICON_SHADE) }}>
-              <CaretCircleDoubleRight size={ICON_SIZE} />
-            </StatIcon>
-            <Spacer horizontal={4} />
-            <Speed speed={speed} />
-          </StatItem>
-        </Stats>
-        <Stats>
-          <StatItem>
-            <StatIcon style={{ background: Colors.indigo(ICON_SHADE) }}>
-              <CalendarBlank size={ICON_SIZE} />
-            </StatIcon>
-            <Spacer horizontal={4} />
-            <DateTime datetime={date} />
-          </StatItem>
-        </Stats>
-        <Stats>
-          <StatItem>
-            <StatIcon style={{ background: Colors.pink(ICON_SHADE) }}>
-              <MapPin size={ICON_SIZE} />
-            </StatIcon>
-            <Spacer horizontal={4} />
-            <PlaceLink to={`/place/${place}`}>{placeName}</PlaceLink>
-          </StatItem>
-        </Stats>
-      </CardWrapper>
-    );
-  }
-);
+          <Duration duration={duration} />
+        </StatItem>
+        <Spacer horizontal={4} />
+        <StatItem>
+          <StatIcon style={{ background: Colors.cyan(ICON_SHADE) }}>
+            <CaretCircleDoubleRight size={ICON_SIZE} />
+          </StatIcon>
+          <Spacer horizontal={4} />
+          <Speed speed={speed} />
+        </StatItem>
+      </Stats>
+      <Stats>
+        <StatItem>
+          <StatIcon style={{ background: Colors.indigo(ICON_SHADE) }}>
+            <CalendarBlank size={ICON_SIZE} />
+          </StatIcon>
+          <Spacer horizontal={4} />
+          <DateTime datetime={date} />
+        </StatItem>
+      </Stats>
+      <Stats>
+        <StatItem>
+          <StatIcon style={{ background: Colors.pink(ICON_SHADE) }}>
+            <MapPin size={ICON_SIZE} />
+          </StatIcon>
+          <Spacer horizontal={4} />
+          <PlaceLink to={`/place/${place}`}>{placeName}</PlaceLink>
+        </StatItem>
+      </Stats>
+    </CardWrapper>
+  );
+});
 
 const CardWrapper = styled("div", {
   backgroundColor: Colors.indigo(50),

@@ -1,4 +1,11 @@
-import { FunctionComponent, memo, useEffect, useMemo, useRef } from "react";
+import {
+  FunctionComponent,
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Layout } from "./Layout";
 import { Plus } from "phosphor-react";
 import { SplitLayout } from "components/SplitLayout";
@@ -41,6 +48,7 @@ const useRouterQuery = createUseRouterQuery(
 
 export const HomePage: FunctionComponent = memo(() => {
   const history = useHistory();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const query = useRouterQuery();
 
@@ -79,6 +87,10 @@ export const HomePage: FunctionComponent = memo(() => {
         <MainHeader
           back={false}
           loading={workoutsRes.isFetching}
+          title={
+            `Workouts` +
+            (workoutsRes.data ? ` (${workoutsRes.data.total})` : ``)
+          }
           authRightAction={
             <Button to="/create-workout" leftIcon={<Plus />} text="Workout" />
           }
@@ -118,6 +130,7 @@ export const HomePage: FunctionComponent = memo(() => {
                             return (
                               <WorkoutCard
                                 key={workout.id}
+                                id={workout.id}
                                 distance={workout.distance}
                                 duration={workout.duration}
                                 speed={workout.speed}
@@ -126,6 +139,8 @@ export const HomePage: FunctionComponent = memo(() => {
                                 placeName={workout.placeName}
                                 userDisplayName={workout.userName}
                                 username={workout.user}
+                                selected={workout.id === selectedId}
+                                onClick={setSelectedId}
                               />
                             );
                           }),
